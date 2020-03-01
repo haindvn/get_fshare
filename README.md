@@ -22,11 +22,14 @@ URL = 'https://www.fshare.vn/folder/THFVWDY4YT'
 
 bot = FSAPI(email="Your email", password="Your password")
 bot.login()
-sillicon_valley_ss1 = bot.get_folder_urls(URL)
+# Obtains file list, exclude sub folders
+sillicon_valley_ss1 = bot.get_folder_urls(URL,subFolder=False)
 
 for episode in sillicon_valley_ss1:
+    #call function download() with linkcode of a folder will result in exception
     print(episode['name'], bot.download("https://www.fshare.vn/file/{}".format(episode['linkcode'])))
 ```
+
 
 **Result**  
 

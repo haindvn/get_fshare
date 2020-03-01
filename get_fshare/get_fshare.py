@@ -8,6 +8,7 @@ import string
 from hyper import HTTPConnection
 import requests
 
+Folder_Indicator = '/folder/'
 
 class FSAPI:
     """
@@ -70,7 +71,7 @@ class FSAPI:
         link = data['location']
         return link
 
-    def get_folder_urls(self, url, page=0, limit=60):
+    def get_folder_urls(self, url, subFolder=True, page=0, limit=60 ):
         url = self.check_valid(url)
         r = self.s.post(
             'https://api.fshare.vn/api/fileops/getFolderList',
@@ -83,6 +84,11 @@ class FSAPI:
             }
         )
         data = r.json()
+        if not subFolder:
+            for i in reversed(data):
+                if (is_folder(i['furl'])):
+                    data.remove(i)
+                    
         return data
 
     def get_home_folders(self):
@@ -182,4 +188,10 @@ class FSAPI:
             except Exception:
                 pass
         data.close()
+    
+    def is_folder(url):
+    if (url.find(Folder_Indicator)) != -1:
+        return True
+    else:
+        return False
 
